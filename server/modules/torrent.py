@@ -1,5 +1,6 @@
 import transmissionrpc
 from operator import itemgetter
+from unicodedata import normalize
 
 class Torrents(object):
     def __init__(self,host='localhost',port='9091',inits=('*','?')):
@@ -7,10 +8,13 @@ class Torrents(object):
         self.tc = transmissionrpc.Client(host,port=port)
         self.update()
 
+    def _norm(self,st):
+        return normalize('NFKD',st).encode('ascii','ignore').decode()
+
     def _getTorrentInfo(self,torrent_id):
         t = self.tc.get_torrent(torrent_id)
         return {'percent'  : int(t.percentDone*100),
-                'name'     : t.name,
+                'name'     : self._norm(t.name),
                 'status'   : t.status,
                 'position' : t.id}
 

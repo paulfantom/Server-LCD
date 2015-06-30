@@ -1,5 +1,6 @@
 import socket
 import re
+from unicodedata import normalize
 
 class MPD(object):
     def __init__(self,host='localhost',port=6600,start='&'):
@@ -8,6 +9,9 @@ class MPD(object):
         self.start = '&'
         self.data = None
 
+    def _norm(self,st):
+        return normalize('NFKD',st).encode('ascii','ignore').decode()
+    
     def update(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((self.host, self.port))
@@ -31,9 +35,9 @@ class MPD(object):
         s.send('currentsong\n'.encode('utf8'))
         res = s.recv(1024).decode()
         pattern = re.compile('Title: (.*?)\n')
-        ret['title'] = pattern.search(res).group()[7:-1]
+        ret['title'] = self._norm(pattern.search(res).group()[7:-1])
         pattern = re.compile('Artist: (.*?)\n')
-        ret['artist'] = pattern.search(res).group()[8:-1]
+        ret['artist'] = self._norm(pattern.search(res).group()[8:-1])
         s.close()
         self.data = ret
         return
