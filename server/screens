@@ -1,0 +1,56 @@
++---+---+----------+---+---------------------+
+|OK |NOT|LED ON NOT|LEN|WHAT                 |
+|   | ~ |  solid   | 17|error screen         |
+| @ | ! |  solid   | 28|services             |
+| # |   |          | 34|uptime + load        |
+| $ | ) |          | 34|temperatures 1       |
+| % | ( |          | 34|temperatures 2       |
+| ^ | / |  solid   | 34|network connectivity |
+| & |   |          | 34|mpd                  |
+| * |   |          | 34|torrent 1            |
+| ? |   |          | 34|torrent 2            | 
++---+---+----------+---+---------------------+
+
+power failure (ACK):
+blinking LCD, 
+solid LED              error screen (ACK):
++----------------+     +----------------+
+|dow dd.mm  HH:MM|     |dow dd.mm  HH:MM|
+| power failure  |     |    MESSAGE     |
++----------------+     +----------------+
+dow - 3 letter day of week
+dd  - day
+mm  - month
+HH  - hour
+MM  - minutes
+
+services (monit):      uptime + load:
++----------------+     +----------------+
+|HH:MM    SERVICE|     |11.1  55.5  9..9|
+|    MESSAGE     |     |     UPTIME     |
++----------------+     +----------------+
+HH - hour              11.1 - 1 minute load
+MM - minutes           55.5 - 5 minutes load
+                       9..9 - 15 minutes load (99.9 or 9.99)
+                       
+temperatures 1:        temperatures 2: 
++----------------+     +----------------+
+|CASE:xXX.X C  YY|     |SYS :xXX.X C  YY|
+|CPU :xXX.X C  YY|     |HDD :xXX.X C  YY|
++----------------+     +----------------+
+xXX.X - temperature
+YY    - trend (based on previous temperature)
+
+network conn:          mpd:                       
++----------------+     +----------------+
+|  EXT IP ADDR   |     |     ARTIST     |
+| LOCAL IP ADDR  |     |     TITLE      |
++----------------+     +----------------+
+
+torrent 1:             torrent 2:
++----------------+     +----------------+ 
+|     TITLE      |     |     TITLE      |
+|A:zz    P:xXX.X%|     |A:zz    P:xXX.X%|
++----------------+     +----------------+
+zz    - all torrents
+xXX.X - progress of this torrent
